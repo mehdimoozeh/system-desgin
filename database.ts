@@ -1,3 +1,5 @@
+import { IStory } from './interface';
+
 export const USERS: { id: number, name: string }[] = [
   {
     id: 1,
@@ -27,3 +29,5 @@ export const RELATIONS: { sourceId: number, targetId: number }[] = [
     targetId: 1
   }
 ]
+
+export const STORIES: IStory[] = [];

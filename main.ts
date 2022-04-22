@@ -1,37 +1,56 @@
-import { USERS, RELATIONS } from './data'
+import {USERS, RELATIONS, STORIES} from './database'
+import {IStory, IStoryFeed} from './interface'
 
-const STORIES = []
-const FEEDS_STORIES = []
-
-function postAStory(data) {
-  STORIES.push(data);
+function getRandomUserId(max: number): number {
+  return Math.floor(Math.random() * max)
 }
 
-function MostafaPostStory() {
+const feedQueueForStories: { [key: string]: IStoryFeed[] } = {}
+
+function initialFeedQueue() {
+  USERS.forEach(user => feedQueueForStories[user.id.toString()] = [])
+}
+
+function printFeedQueue(): void {
+  Object.keys(feedQueueForStories)
+    .forEach( key => console.log(`User(${key}) -> feedItem(${feedQueueForStories[key].length})`));
+}
+
+function pushToMyFollowersFeed(story: IStory): void {
+  // IMAGINE THIS IS A SELECT QUERY.
+  // SELECT sourceId as myFollowers FROM relation_table WHERE targetId = story.ownerId;
+  const myFollowers = RELATIONS.filter(relation => relation.targetId === story.ownerId).map(item => item.sourceId)
+  myFollowers.forEach(followerId => {
+    feedQueueForStories[followerId].push({
+      ...story,
+      seen: false
+    })
+  })
+  printFeedQueue()
+}
+
+function postAStory(story: IStory): void {
+  STORIES.push(story)
+  pushToMyFollowersFeed(story)
+  console.log(`${story.ownerId} created a story!`)
+}
+
+let storyId = 1000
+
+function somePostAStory(): void {
+  const storyOwnerId = getRandomUserId(USERS.length)
   postAStory({
-    id: 1,
-    ownerId: USERS[0].id,
-    pictureUrl: 'mostafa image 1',
+    id: ++storyId,
+    ownerId: USERS[storyOwnerId].id,
+    pictureUrl: 'https://image.com/' + Date.now().toString(),
     createAt: new Date()
   })
-  postAStory({
-    id: 2,
-    ownerId: USERS[0].id,
-    pictureUrl: 'mostafa image 2',
-    createAt: new Date()
-  })
 }
 
-function MohammadPostStory() {
-  postAStory({
-    id: 3,
-    ownerId: USERS[1].id,
-    pictureUrl: 'mohammad image1',
-    createAt: new Date()
-  })
+function start(): void {
+  initialFeedQueue()
 }
 
-function init() {
-
-}
+setInterval(somePostAStory, 5000)
+start()
 
