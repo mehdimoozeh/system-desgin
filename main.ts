@@ -37,7 +37,7 @@ function postAStory(story: IStory): void {
 
 let storyId = 1000
 
-function somePostAStory(): void {
+function someonePostAStory(): void {
   const storyOwnerId = getRandomUserId(USERS.length)
   postAStory({
     id: ++storyId,
@@ -51,6 +51,6 @@ function start(): void {
   initialFeedQueue()
 }
 
-setInterval(somePostAStory, 5000)
+setInterval(someonePostAStory, 5000)
 start()
 
