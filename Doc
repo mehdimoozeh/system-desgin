@@ -1,0 +1,30 @@
+Users Table
+id: 1
+name: Mohammad
+id: 2
+name: Farnood
+id: 3
+name: Siavash
+
+Relations
+sourceId: 1, targetId: 2
+sourceId: 2, targetId: 1
+
+Stories Table
+id: 1
+ownerId: 1
+pictureId: 1
+createdAt: Date
+
+id: 2
+ownerId: 2
+pictureId: 2
+createdAt: Date
+
+
+
+Tracking stories  Table - TTL
+ownerId: 1
+lastCreateStory: Date
+
+Seen or not Seen?
